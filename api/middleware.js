@@ -2,8 +2,8 @@ const fetch = require('node-fetch')
 
 module.exports = function(req, res, next) {
 	console.log(req)
-	if (req.url.startsWith('/api/img/')) {
-		url = req.url.replace('/api/img/', '')
+	if (req.url.startsWith('/img/')) {
+		url = req.url.replace('/img/', '')
 		url = decodeURIComponent(url)
 		fetch(url)
 			.then(response => response.buffer())
