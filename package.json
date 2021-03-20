@@ -1,0 +1,7 @@
+{
+	"name": "",
+	"version": "0.1.0",
+	"dependencies": {
+		"node-fetch": "7.6.0"
+	}
+}
