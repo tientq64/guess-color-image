@@ -5,11 +5,14 @@ data = data
 	.trim!
 	.split \\n
 	.map (.split \_)
-w = 64
-h = 64
+w = 1
+h = 1
 canvas.width = w
 canvas.height = h
+canvas.style.zoom = 64
 ctx = canvas.getContext \2d
+ctx.imageSmoothingEnabled = no
+imgEl.width = 64
 
 hasChange = no
 promises = []
@@ -19,21 +22,15 @@ for let item in data
 			img = new Image
 			img.src = "img/https://flaticon.com/svg/static/icons/svg/#{item.1.slice 0 -3}/#{item.1}.svg"
 			img.onload = !~>
-				colors = {}
+				imgEl.src = img.src
 				ctx.clearRect 0 0 w, h
 				ctx.drawImage img, 0 0 w, h
 				imgdata = ctx.getImageData 0 0 w, h .data
-				for i til imgdata.length by 4
-					if imgdata[i + 3] is 255
-						r = imgdata[i]toString 16 .padStart 2 0
-						g = imgdata[i + 1]toString 16 .padStart 2 0
-						b = imgdata[i + 2]toString 16 .padStart 2 0
-						color = \# + r + g + b
-						colors[color] ?= 0
-						colors[color]++
-				colors = Object.entries colors
-					.sort (a, b) ~> b.1 - a.1
-				json.push [item.0, item.1, colors.0.0]
+				r = imgdata.0.toString 16 .padStart 2 0
+				g = imgdata.1.toString 16 .padStart 2 0
+				b = imgdata.2.toString 16 .padStart 2 0
+				color = \# + r + g + b
+				json.push [item.0, item.1, color]
 				hasChange = yes
 				resolve!
 			img.onerror = !~>

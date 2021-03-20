@@ -1,6 +1,6 @@
 require! {
 	\live-server
-	\./middleware.js
+	\./api/middleware.js
 }
 process.chdir __dirname
 
