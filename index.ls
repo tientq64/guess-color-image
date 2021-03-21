@@ -9,7 +9,7 @@ App =
 		@w = 0
 		@audio =
 			tap: new Audio \https://freesound.org/data/previews/257/257916_4286975-lq.mp3
-			exact: new Audio \https://freesound.org/data/previews/527/527530_3202600-lq.mp3
+			exact: new Audio \https://freesound.org/data/previews/174/174027_3242494-lq.mp3
 			lose: new Audio \https://freesound.org/data/previews/370/370209_1954916-lq.mp3
 		@nextImg!
 
