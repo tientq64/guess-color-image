@@ -42,6 +42,7 @@ App =
 				m.redraw.sync!
 				canvas.width = @w
 				canvas.height = @w
+				canvas.style.imageRendering = ""
 				canvas.style.transform = ""
 				canvas.style.background = ""
 				ctx = canvas.getContext \2d
@@ -56,6 +57,7 @@ App =
 		unless @selColor
 			@audio.tap.play!
 			@selColor = color
+			canvas.style.imageRendering = \pixelated
 			anime do
 				targets: @
 				w: 1
@@ -104,7 +106,7 @@ App =
 					m \h3.col-2.text-center,
 						@title
 					m \.col-5.row.center.middle,
-						m \canvas.img-pixelated,
+						m \canvas,
 							id: \canvas
 							style:
 								borderRadius: \.05px
