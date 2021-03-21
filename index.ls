@@ -8,7 +8,7 @@ App =
 		@score = 0
 		@w = 0
 		@audio =
-			tap: new Audio \https://freesound.org/data/previews/257/257916_4286975-lq.mp3
+			tap: new Audio \https://freesound.org/data/previews/262/262958_4932087-lq.mp3
 			exact: new Audio \https://freesound.org/data/previews/174/174027_3242494-lq.mp3
 			lose: new Audio \https://freesound.org/data/previews/370/370209_1954916-lq.mp3
 		@nextImg!
@@ -60,7 +60,7 @@ App =
 				targets: @
 				w: 1
 				duration: 1000
-				easing: \easeOutQuart
+				easing: \linear
 				update: !~>
 					canvas.width = @w
 					canvas.height = @w
@@ -78,22 +78,24 @@ App =
 							'Giỏi vãi! 😱'
 							'Đỉnh thật! 😮'
 							'Siêu! 😋'
+							'Giỏi thế ai chơi! 🥺'
+						@title = _.sample titles
 						@audio.exact.play!
 					else
-						@score = 0
 						titles =
 							'Sai rồi! 😥'
 							'Thử lại nhé! 🙁'
+						@title = _.sample titles
 						@audio.lose.play!
-						# anime do
-						# 	targets: @
-						# 	score: 0
-						# 	duration: 1000
-						# 	easing: \easeOutQuart
-						# 	update: !~>
-						# 		m.redraw!
-						# 	complete: !~>
-					@title = _.sample titles
+						await anime do
+							targets: @
+							score: 0
+							duration: 2000
+							easing: \easeOutQuad
+							update: !~>
+								@score = Math.round @score
+								m.redraw!
+						.finished
 					@nextImg!
 					m.redraw!
 
@@ -112,11 +114,14 @@ App =
 					m \.col-5.row.center.middle,
 						m \canvas.img-pixelated,
 							id: \canvas
+							style:
+								borderRadius: \.05px
 					m \.col-4.w-100.row.gap-x-4.between.middle,
 						@colors.map (color) ~>
 							m \.col.ratio-1x1.color,
 								style:
 									maxWidth: \160px
+									borderRadius: \8px
 									background: color
 								onclick: !~>
 									@onclickColor color
