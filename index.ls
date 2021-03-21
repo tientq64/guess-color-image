@@ -109,13 +109,13 @@ App =
 						m \canvas,
 							id: \canvas
 							style:
-								borderRadius: \.05px
+								borderRadius: \.1px
 					m \.col-4.w-100.row.gap-x-4.between.middle,
 						@colors.map (color) ~>
 							m \.col.ratio-1x1.color,
 								style:
 									maxWidth: \160px
-									borderRadius: \8px
+									borderRadius: \16px
 									background: color
 								onclick: !~>
 									@onclickColor color
