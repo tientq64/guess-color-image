@@ -46,7 +46,7 @@ App =
 				canvas.style.transform = ""
 				canvas.style.background = ""
 				ctx = canvas.getContext \2d
-				ctx.imageSmoothingEnabled = no
+				ctx.imageSmoothingEnabled = yes
 				ctx.drawImage @img, 0 0 @w, @w
 			else
 				@nextImg!
