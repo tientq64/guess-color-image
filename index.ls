@@ -50,19 +50,20 @@ App =
 
 	onclickColor: (color) !->
 		unless @selColor
+			@selColor = color
 			anime do
 				targets: @
 				w: 1
 				duration: 1000
 				easing: \easeOutQuart
-				update: (anim) !~>
+				update: !~>
 					canvas.width = @w
 					canvas.height = @w
 					canvas.style.transform = "scale(#{180 / @w})"
 					ctx = canvas.getContext \2d
 					ctx.imageSmoothingEnabled = no
 					ctx.drawImage @img, 0 0 @w, @w
-				complete: (anim) !~>
+				complete: !~>
 					canvas.style.background = @color
 					if color is @color
 						@score++
@@ -73,9 +74,18 @@ App =
 							'Đỉnh thật! 😮'
 							'Siêu! 😋'
 					else
+						@score = 0
 						titles =
 							'Sai rồi! 😥'
 							'Thử lại nhé! 🙁'
+						# anime do
+						# 	targets: @
+						# 	score: 0
+						# 	duration: 1000
+						# 	easing: \easeOutQuart
+						# 	update: !~>
+						# 		m.redraw!
+						# 	complete: !~>
 					@title = _.sample titles
 					@nextImg!
 					m.redraw!
@@ -89,15 +99,15 @@ App =
 				m \.column.h-100.center,
 					m \.col-1.row.w-100,
 						m \.col,
-							"Score: #@score"
+							"Điểm: #@score"
 					m \h3.col-2.text-center,
 						@title
 					m \.col-5.row.center.middle,
-						m \canvas,
+						m \canvas.img-pixelated,
 							id: \canvas
 					m \.col-4.w-100.row.gap-x-4.between.middle,
 						@colors.map (color) ~>
-							m \.col.ratio-4x3.color,
+							m \.col.ratio-1x1.color,
 								style:
 									maxWidth: \160px
 									background: color
