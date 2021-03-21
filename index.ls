@@ -82,20 +82,12 @@ App =
 						@title = _.sample titles
 						@audio.exact.play!
 					else
+						@score = 0
 						titles =
 							'Sai rồi! 😥'
 							'Thử lại nhé! 🙁'
 						@title = _.sample titles
 						@audio.lose.play!
-						await anime do
-							targets: @
-							score: 0
-							duration: 2000
-							easing: \easeOutQuad
-							update: !~>
-								@score = Math.round @score
-								m.redraw!
-						.finished
 					@nextImg!
 					m.redraw!
 
