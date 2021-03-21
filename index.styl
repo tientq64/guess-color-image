@@ -1,7 +1,15 @@
-@import "https://fonts.googleapis.com/css?family=Ranchers:400,700"
-
+@import "https://fonts.googleapis.com/css?family=Barriecito:400,700"
 body
-	font 24pt "Ranchers",sans-serif
+	font 20pt "Barriecito",sans-serif
+:focus
+	outline 0
+h1, h2, h3, h4, h5, h6
+	font-weight 400
 #appEl
 	position absolute
 	inset 0
+	background #fafbfc
+.color
+	transition transform .15s
+	&:hover
+		transform scale(.9)
