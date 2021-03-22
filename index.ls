@@ -81,24 +81,24 @@ App =
 			@nextImg!
 
 	onclickColor: (color, event) !->
+		{x, y, width, height} = event.target.getBoundingClientRect!
+		mark.style.display = \block
+		@audio.tap.play!
+		anime do
+			targets: mark
+			left: [x + \px, x - 12 + \px]
+			top: [y + \px, y - 12 + \px]
+			width: [width + \px, width + 24 + \px]
+			height: [height + \px, height + 24 + \px]
+			borderRadius: [\20px \20px]
+			opacity: [1 0]
+			duration: 500
+			easing: \easeOutBack
+			complete: !~>
+				mark.style.display = \none
 		unless @selColor
 			@selColor = color
 			canvas.style.imageRendering = \pixelated
-			@audio.tap.play!
-			{x, y, width, height} = event.target.getBoundingClientRect!
-			mark.style.display = \block
-			anime do
-				targets: mark
-				left: [x + \px, x - 12 + \px]
-				top: [y + \px, y - 12 + \px]
-				width: [width + \px, width + 24 + \px]
-				height: [height + \px, height + 24 + \px]
-				borderRadius: [\20px \20px]
-				opacity: [1 0]
-				duration: 500
-				easing: \easeOutBack
-				complete: !~>
-					mark.style.display = \none
 			anime do
 				targets: @
 				w: 1
