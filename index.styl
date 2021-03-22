@@ -1,6 +1,7 @@
 @import "https://fonts.googleapis.com/css?family=Barriecito:400,700"
 body
 	font 20pt "Barriecito",sans-serif
+	overflow hidden
 	color #182026
 :focus
 	outline 0
@@ -11,6 +12,11 @@ h1, h2, h3, h4, h5, h6
 	inset 0
 	background #f5f8fa
 .color
-	transition transform .15s
+	transition transform .25s
 	&:active
 		transform scale(.9)
+#mark
+	position absolute
+	border solid 4px #2196f3cc
+	display none
+	pointer-events none

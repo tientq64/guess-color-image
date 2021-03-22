@@ -13,51 +13,89 @@ App =
 			lose: new Audio \https://freesound.org/data/previews/370/370209_1954916-lq.mp3
 		@nextImg!
 
+	class: (...classes) ->
+		res = []
+		for cls in classes
+			if Array.isArray cls
+				res.push @class ...cls
+			else if cls instanceof Object
+				for k, v of cls
+					res.push k if v
+			else if cls?
+				res.push cls
+		res * " "
+
+	style: (...styles) ->
+		res = {}
+		for style in styles
+			if Array.isArray style
+				style = @style ...style
+			if style instanceof Object
+				for k, val of style
+					res[k] = val
+					res[k] += \px if not cssUnitless[k] and +val
+		res
+
 	nextImg: ->
 		id = _.random 210000 367250
 		@img = new Image
-		@img.src = await (await fetch "https://guess-color-image.vercel.app/api/svg?id=#id")text!
-		@img.onload = !~>
-			el = document.createElement \canvas
-			el.width = 1
-			el.height = 1
-			ctx = el.getContext \2d
-			ctx.imageSmoothingEnabled = no
-			ctx.drawImage @img, 0 0 1 1
-			[r, g, b] = ctx.getImageData 0 0 1 1 .data
-			if r and g and b
-				@color = "rgb(#r,#g,#b)"
-				colors = [@color]
-				while colors.length < 4
-					r = _.random 255
-					g = _.random 255
-					b = _.random 255
-					color = "rgb(#r,#g,#b)"
-					unless colors.includes color
-						colors.push color
-				@w = 180
-				@colors = _.shuffle colors
-				@selColor = void
-				@title = 'Đâu là hình ảnh trên khi độ phân giải còn 1px? 🧐'
-				m.redraw.sync!
-				canvas.width = @w
-				canvas.height = @w
-				canvas.style.imageRendering = ""
-				canvas.style.transform = ""
-				canvas.style.background = ""
-				ctx = canvas.getContext \2d
-				ctx.imageSmoothingEnabled = yes
-				ctx.drawImage @img, 0 0 @w, @w
-			else
+		try
+			@img.src = await (await fetch "https://guess-color-image.vercel.app/api/svg?id=#id")text!
+			@img.onload = !~>
+				el = document.createElement \canvas
+				el.width = 1
+				el.height = 1
+				ctx = el.getContext \2d
+				ctx.imageSmoothingEnabled = no
+				ctx.drawImage @img, 0 0 1 1
+				[r, g, b] = ctx.getImageData 0 0 1 1 .data
+				if r and g and b
+					@color = "rgb(#r,#g,#b)"
+					colors = [@color]
+					while colors.length < 4
+						r = _.random 255
+						g = _.random 255
+						b = _.random 255
+						color = "rgb(#r,#g,#b)"
+						unless colors.includes color
+							colors.push color
+					@w = 180
+					@colors = _.shuffle colors
+					@selColor = void
+					@title = 'Đâu là hình ảnh trên khi độ phân giải còn 1px? 🧐'
+					m.redraw.sync!
+					canvas.width = @w
+					canvas.height = @w
+					canvas.style.imageRendering = ""
+					canvas.style.transform = ""
+					canvas.style.background = ""
+					mark.style.display = \none
+					ctx = canvas.getContext \2d
+					ctx.imageSmoothingEnabled = yes
+					ctx.drawImage @img, 0 0 @w, @w
+				else
+					@nextImg!
+			@img.onerror = !~>
 				@nextImg!
-		@img.onerror = !~>
+		catch
 			@nextImg!
 
-	onclickColor: (color) !->
+	onclickColor: (color, event) !->
 		unless @selColor
-			@audio.tap.play!
 			@selColor = color
 			canvas.style.imageRendering = \pixelated
+			@audio.tap.play!
+			{x, y, width, height} = event.target.getBoundingClientRect!
+			mark.style.display = \block
+			anime do
+				targets: mark
+				left: [x + \px, x - 12 + \px]
+				top: [y + \px, y - 12 + \px]
+				width: [width + \px, width + 24 + \px]
+				height: [height + \px, height + 24 + \px]
+				borderRadius: [\20px \20px]
+				duration: 500
+				easing: \easeOutBack
 			anime do
 				targets: @
 				w: 1
@@ -98,26 +136,35 @@ App =
 			style:
 				maxWidth: \600px
 				margin: \auto
+				backgroundImage: 'linear-gradient(145deg,#607d8bcc,#fff)'
 			if @color
 				m \.column.h-100.center,
-					m \.col-1.row.w-100,
+					m \.row.w-100,
+						style:
+							height: \10%
 						m \.col,
 							"Điểm: #@score"
-					m \h3.col-2.text-center,
+					m \h3.text-center,
+						style:
+							height: \20%
 						@title
-					m \.col-5.row.center.middle,
-						m \canvas,
-							id: \canvas
+					m \.row.center.middle,
+						style:
+							height: \40%
+						m \canvas#canvas,
 							style:
 								borderRadius: \.1px
-					m \.col-4.w-100.row.gap-x-4.between.middle,
+					m \.w-100.row.gap-x-4.between.middle,
+						style:
+							height: \30%
 						@colors.map (color) ~>
 							m \.col.ratio-1x1.color,
 								style:
 									maxWidth: \160px
 									borderRadius: \16px
 									background: color
-								onclick: !~>
-									@onclickColor color
+								onclick: (event) !~>
+									@onclickColor color, event
+			m \#mark
 
 m.mount appEl, App
