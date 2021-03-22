@@ -157,7 +157,7 @@ App =
 					else
 						if @score is 0
 							titles =
-								'Chưa gì đã sai rồi! 😂'
+								'Chưa gì đã sai thế! 😂'
 								'0 điểm về chỗ! 🤣'
 						unless titles
 							titles =
@@ -169,7 +169,13 @@ App =
 						@score = 0
 						@isNewHighScore = no
 						@audio.lose.play!
-					@nextImg!
+					anime do
+						targets: canvas
+						scale: 220
+						duration: 800
+						easing: \easeOutQuint
+						complete: !~>
+							@nextImg!
 					m.redraw!
 
 	view: ->
