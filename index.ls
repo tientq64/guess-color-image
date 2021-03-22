@@ -91,9 +91,11 @@ App =
 			width: [width + \px, width + 24 + \px]
 			height: [height + \px, height + 24 + \px]
 			borderRadius: [\20px \20px]
-			opacity: [1 0]
+			opacity:
+				value: [1 0]
+				easing: \easeInQuart
 			duration: 500
-			easing: \easeOutBack
+			easing: \easeOutQuart
 			complete: !~>
 				mark.style.display = \none
 		unless @selColor
