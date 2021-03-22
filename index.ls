@@ -6,6 +6,7 @@ App =
 		@title = ""
 		@img = null
 		@score = 0
+		@highScore = +localStorage.guessColorImage_hightScore or 0
 		@w = 0
 		@audio =
 			tap: new Audio \https://freesound.org/data/previews/262/262958_4932087-lq.mp3
@@ -122,6 +123,9 @@ App =
 					canvas.style.background = @color
 					if color is @color
 						@score++
+						if @score > @highScore
+							@highScore = @score
+							localStorage.guessColorImage_hightScore = @highScore
 						titles =
 							'Tuyệt! 🎉'
 							'Đúng luôn haha! 😆'
@@ -154,6 +158,8 @@ App =
 							height: \10%
 						m \.col,
 							"Điểm: #@score"
+						m \.col.text-right,
+							"Điểm cao: #@highScore"
 					m \h3.text-center,
 						style:
 							height: \20%
