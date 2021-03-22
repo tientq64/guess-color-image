@@ -3,10 +3,11 @@ App =
 		@colors = []
 		@color = void
 		@selColor = void
-		@title = ""
+		@title = ''
 		@img = null
 		@score = 0
-		@highScore = +localStorage.guessColorImage_hightScore or 0
+		@highScore = +localStorage.guessColorImage_highScore or 0
+		@isNewHighScore = no
 		@w = 0
 		@audio =
 			tap: new Audio \https://freesound.org/data/previews/262/262958_4932087-lq.mp3
@@ -67,9 +68,12 @@ App =
 					m.redraw.sync!
 					canvas.width = @w
 					canvas.height = @w
-					canvas.style.imageRendering = ""
-					canvas.style.transform = ""
-					canvas.style.background = ""
+					canvas.style.imageRendering = ''
+					canvas.style.transform = ''
+					canvas.style.background = ''
+					canvas.style.filter = ''
+					if @score >= 10
+						canvas.style.filter = 'grayscale(.9)'
 					ctx = canvas.getContext \2d
 					ctx.imageSmoothingEnabled = yes
 					ctx.drawImage @img, 0 0 @w, @w
@@ -114,35 +118,56 @@ App =
 				w: 1
 				duration: 1000
 				easing: \linear
-				update: !~>
+				update: (anim) !~>
 					canvas.width = @w
 					canvas.height = @w
 					canvas.style.transform = "scale(#{180 / @w})"
+					if canvas.style.filter.includes \grayscale
+						canvas.style.filter = "grayscale(#{0.9 * (1 - anim.progress / 100)})"
 					ctx = canvas.getContext \2d
 					ctx.imageSmoothingEnabled = no
 					ctx.drawImage @img, 0 0 @w, @w
 				complete: !~>
 					canvas.style.background = @color
+					@title = ''
 					if color is @color
 						@score++
+						if @highScore > 4 and not @isNewHighScore
+							if @score is @highScore
+								@title = 'Bạn sắp đạt kỷ lục mới! 😧'
+							else if @score > @highScore
+								@title = 'Vượt kỷ lục rồi! 😱'
+						unless @title
+							titles =
+								'Tuyệt! 🎉'
+								'Đúng luôn haha! 😆'
+								'Giỏi vãi! 😱'
+								'Đỉnh thật! 😮'
+								'Ghê đấy! 😌'
+								'Xuất sắc! 👏'
+								'Khá phết nhờ! 😃'
+								'Siêu! 😋'
+								'Giỏi thế ai chơi! 🥺'
+							@title = _.sample titles
 						if @score > @highScore
 							@highScore = @score
-							localStorage.guessColorImage_hightScore = @highScore
-						titles =
-							'Tuyệt! 🎉'
-							'Đúng luôn haha! 😆'
-							'Giỏi vãi! 😱'
-							'Đỉnh thật! 😮'
-							'Siêu! 😋'
-							'Giỏi thế ai chơi! 🥺'
-						@title = _.sample titles
+							localStorage.guessColorImage_highScore = @highScore
+							@isNewHighScore = yes
 						@audio.exact.play!
 					else
-						@score = 0
-						titles =
-							'Sai rồi! 😥'
-							'Thử lại nhé! 🙁'
+						if @score is 0
+							titles =
+								'Chưa gì đã sai rồi! 😂'
+								'0 điểm về chỗ! 🤣'
+						unless titles
+							titles =
+								'Sai rồi! 😥'
+								'Thử lại nhé! 🙁'
+								'Nhầm rồi bạn ơi! 😵'
+								'Ôi không! 😭'
 						@title = _.sample titles
+						@score = 0
+						@isNewHighScore = no
 						@audio.lose.play!
 					@nextImg!
 					m.redraw!
@@ -150,11 +175,11 @@ App =
 	view: ->
 		m \.p-4.h-100,
 			style:
-				maxWidth: \600px
+				maxWidth: \400px
 				margin: \auto
 				backgroundImage: 'linear-gradient(180deg,#ffb6ce,#fff)'
 			if @color
-				m \.column.h-100.center,
+				m \.h-100,
 					m \.row.w-100,
 						style:
 							height: \10%
@@ -162,7 +187,7 @@ App =
 							"Điểm: #@score"
 						m \.col.text-right,
 							"Điểm cao: #@highScore"
-					m \h3.text-center,
+					m \h3.m-0.text-center,
 						style:
 							height: \20%
 						@title
