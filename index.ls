@@ -82,6 +82,7 @@ App =
 
 	onclickColor: (color, event) !->
 		{x, y, width, height} = event.target.getBoundingClientRect!
+		@audio.tap.load!
 		@audio.tap.play!
 		markEl = document.createElement \div
 		appEl.appendChild markEl
