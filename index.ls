@@ -152,7 +152,7 @@ App =
 			style:
 				maxWidth: \600px
 				margin: \auto
-				backgroundImage: 'linear-gradient(145deg,#607d8bcc,#fff)'
+				backgroundImage: 'linear-gradient(180deg,#ffb6ce,#fff)'
 			if @color
 				m \.column.h-100.center,
 					m \.row.w-100,
