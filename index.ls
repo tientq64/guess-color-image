@@ -70,7 +70,6 @@ App =
 					canvas.style.imageRendering = ""
 					canvas.style.transform = ""
 					canvas.style.background = ""
-					mark.style.display = \none
 					ctx = canvas.getContext \2d
 					ctx.imageSmoothingEnabled = yes
 					ctx.drawImage @img, 0 0 @w, @w
@@ -83,10 +82,12 @@ App =
 
 	onclickColor: (color, event) !->
 		{x, y, width, height} = event.target.getBoundingClientRect!
-		mark.style.display = \block
 		@audio.tap.play!
+		markEl = document.createElement \div
+		appEl.appendChild markEl
+		markEl.className = \mark
 		anime do
-			targets: mark
+			targets: markEl
 			left: [x + \px, x - 12 + \px]
 			top: [y + \px, y - 12 + \px]
 			width: [width + \px, width + 24 + \px]
@@ -98,7 +99,7 @@ App =
 			duration: 500
 			easing: \easeOutQuart
 			complete: !~>
-				mark.style.display = \none
+				markEl.remove!
 		anime do
 			targets: event.target
 			scale: [0.9 1]
@@ -181,6 +182,5 @@ App =
 									background: color
 								onclick: (event) !~>
 									@onclickColor color, event
-			m \#mark
 
 m.mount appEl, App
