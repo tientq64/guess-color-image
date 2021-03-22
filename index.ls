@@ -94,8 +94,11 @@ App =
 				width: [width + \px, width + 24 + \px]
 				height: [height + \px, height + 24 + \px]
 				borderRadius: [\20px \20px]
+				opacity: [1 0]
 				duration: 500
 				easing: \easeOutBack
+				complete: !~>
+					mark.style.display = \none
 			anime do
 				targets: @
 				w: 1
