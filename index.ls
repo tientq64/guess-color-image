@@ -93,7 +93,7 @@ App =
 			top: [y + \px, y - 12 + \px]
 			width: [width + \px, width + 24 + \px]
 			height: [height + \px, height + 24 + \px]
-			borderRadius: [\20px \20px]
+			borderRadius: [\24px \24px]
 			opacity:
 				value: [1 0]
 				easing: \easeInQuart
