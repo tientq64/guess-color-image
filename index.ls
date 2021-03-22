@@ -98,6 +98,11 @@ App =
 			easing: \easeOutQuart
 			complete: !~>
 				mark.style.display = \none
+		anime do
+			targets: event.target
+			scale: [0.9 1]
+			duration: 500
+			easing: \easeOutQuart
 		unless @selColor
 			@selColor = color
 			canvas.style.imageRendering = \pixelated
